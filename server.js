@@ -24,6 +24,9 @@ const sequelize = new Sequelize(
     dialectOptions: {
       ssl: { rejectUnauthorized: false },
     },
+    define: {
+      freezeTableName: true,
+    },
     query: { raw: true },
   }
 )
@@ -31,12 +34,12 @@ const sequelize = new Sequelize(
 const initialize = async () => {
   try {
     await sequelize.authenticate()
-    console.log("DB Connection has been established successfully.")
+    console.log("DB connection has been established successfully.")
     app.listen(HTTP_PORT, () => {
       console.log(`Express http server listening on ${HTTP_PORT}`)
     })
   } catch (error) {
-    console.error("Unable to connect to the database:", error)
+    console.error("Error:", error.message)
   }
 }
 
