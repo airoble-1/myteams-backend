@@ -1,9 +1,9 @@
 const { Sequelize } = require("sequelize")
 // sequelize to connect to the postgres database on Heroku
 const sequelize = new Sequelize(
-  "d8oe78572tnmv1",
-  "wtcaqrwushovjc",
-  "d6f0a71f761c4806aaa3fdfd4e55c00c63b0e55a99b0d23192c183d2bc9ba244",
+  "ddqkig0mh00lb1",
+  "uajxjmvvgomizw",
+  "6086995a2dfc72992d6d8bc8909854a02be6287504ee555dc48b484b96c8684b",
   {
     host: "ec2-52-86-56-90.compute-1.amazonaws.com",
     dialect: "postgres",
@@ -15,6 +15,7 @@ const sequelize = new Sequelize(
       freezeTableName: true,
     },
     query: { raw: true },
+    logging: false,
   }
 )
 
