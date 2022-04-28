@@ -15,19 +15,12 @@ app.get("/", (req, res) => {
   res.json("Hello World!")
 })
 
-app.post("/register", userControllers.user_register)
+app.post("/api/user/register", userControllers.user_register)
 
 const initialize = async () => {
   try {
     // User.belongsToMany(Team, { through: "User_Teams" })
-    await sequelize.sync({ force: true })
-    // User.create({
-    //   username: "airoble1",
-    //   email: "airoble1@myseneca.ca",
-    //   firstName: "Ahmed",
-    //   lastName: "Roble",
-    //   password: "12345678",
-    // })
+    await sequelize.sync()
     app.listen(HTTP_PORT, () => {
       console.log(`Express http server listening on ${HTTP_PORT}`)
     })
