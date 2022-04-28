@@ -1,4 +1,5 @@
-const { sequelize } = require("sequelize")
+const sequelize = require("./../../../database/database")
+const Sequelize = require("sequelize")
 const Team = require("../../../api/team/model/team")
 
 const User = sequelize.define("User", {
@@ -33,13 +34,7 @@ const User = sequelize.define("User", {
     defaultValue: "PENDING",
   },
   inviteMessage: Sequelize.TEXT,
+  password: Sequelize.STRING,
 })
-
-User.belongsToMany(Team, { through: "team_user" })
-
-sequelize
-  .sync({ alter: true })
-  .then()
-  .catch((err) => console.log("User table could not be synced:", err))
 
 module.exports = User
