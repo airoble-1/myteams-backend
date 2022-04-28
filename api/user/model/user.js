@@ -3,7 +3,7 @@ const Sequelize = require("sequelize")
 const Team = require("../../../api/team/model/team")
 
 const User = sequelize.define("User", {
-  username: {
+  userName: {
     type: Sequelize.STRING,
     allowNull: false,
     unique: true,
