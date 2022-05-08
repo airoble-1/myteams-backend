@@ -6,14 +6,8 @@ module.exports.user_register = async (req, res) => {
   try {
     res.status(500)
     //1 . destructure the req.body
-    let { userName, email, firstName, lastName, password, confirmPassword } =
-      req.body
+    let { email, firstName, lastName, password, confirmPassword } = req.body
     //2 . check if the user already exists throw error
-    const usernames = await User.findAll({ where: { userName } })
-    if (usernames.length > 0) {
-      res.status(401)
-      throw new Error("User already exists")
-    }
     const emails = await User.findAll({ where: { email } })
     if (emails.length > 0) {
       res.status(401)
@@ -38,33 +32,47 @@ module.exports.user_register = async (req, res) => {
     if (!isEmailValid) {
       throw new Error("Pleae enter a valid email address")
     }
-
     //7 . hash the password
     const hashedPassword = await bcrypt.hash(password, 10)
     //8 . create the user in DB
     const user = await User.create({
-      userName,
       email,
       firstName,
       lastName,
       password: hashedPassword,
     })
-    const { id, userName: newUserName, email: newEmail } = user.dataValues
-    //9 . generate the token
-    const token = jwtGenerator(id)
+    if (user) {
+      res.status(200).json({
+        message: "User created successfully",
+      })
+    }
+  } catch (error) {
+    res.json({
+      message: error.message,
+    })
+  }
+}
+
+module.exports.user_login = async (req, res) => {
+  try {
+    res.status(500)
+    const { email, password } = req.body
+    const dbUser = await User.findOne({ where: { email } })
+    if (!dbUser) {
+      res.status(401)
+      throw new Error("email or password is incorrect")
+    }
+    const isPasswordValid = await bcrypt.compare(password, dbUser.password)
+    if (!isPasswordValid) {
+      res.status(401)
+      throw new Error("email or password is incorrect")
+    }
     res.status(200).json({
-      token,
-      user: {
-        id,
-        username: newUserName,
-        email: newEmail,
-      },
+      token: jwtGenerator(dbUser.id),
     })
   } catch (error) {
     res.json({
-      error: {
-        message: error.message,
-      },
+      message: error.message,
     })
   }
 }
